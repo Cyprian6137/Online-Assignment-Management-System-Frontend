@@ -1,28 +1,28 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useHistory } from "react-router-dom";
 import NavbarLayout from "../components/NavbarLayout";
 
-const Assignment = () => {
+const AssignmentList = () => {
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const history = useHistory();
 
   useEffect(() => {
     const fetchAssignments = async () => {
       try {
-        const token = localStorage.getItem("token"); // Get token for authentication
+        const token = localStorage.getItem("token");
         const { data } = await axios.get("http://localhost:5000/api/assignments", {
           headers: { Authorization: `Bearer ${token}` },
         });
-
-        setAssignments(data); // Store assignments in state
+        setAssignments(data);
       } catch (error) {
         toast.error(error.response?.data?.message || "Failed to load assignments");
       } finally {
-        setLoading(false); // Stop loading indicator
+        setLoading(false);
       }
     };
-
     fetchAssignments();
   }, []);
 
@@ -30,7 +30,6 @@ const Assignment = () => {
     <NavbarLayout isAdmin={false}>
       <div className="container mt-4">
         <h2 className="mb-4 text-center">📚 Available Assignments</h2>
-
         {loading ? (
           <div className="text-center">
             <div className="spinner-border text-primary" role="status">
@@ -51,8 +50,14 @@ const Assignment = () => {
                       <strong>Due Date:</strong> {new Date(assignment.dueDate).toLocaleDateString()}
                     </p>
                     <p className="text-muted">
-                      <strong>Created By:</strong> {assignment.createdBy?.name || "Unknown"}
+                      <strong>Status:</strong> {assignment.submitted ? "✅ Submitted" : "❌ Not Submitted"}
                     </p>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => history.push(`/assignments/${assignment._id}`)}
+                    >
+                      {assignment.submitted ? "View Submission" : "Start Assignment"}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -64,4 +69,4 @@ const Assignment = () => {
   );
 };
 
-export default Assignment;
+export default AssignmentList;

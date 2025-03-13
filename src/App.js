@@ -4,11 +4,13 @@ import { ToastContainer } from "react-toastify"; // ✅ Import ToastContainer
 import "react-toastify/dist/ReactToastify.css"; // ✅ Import Toastify styles
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Login from './pages/Login';
-import AdminDashboard from './pages/AdminDahbord';
+import AdminDashboard from './pages/AdminDashboard';
 import StudentDashboard from './pages/StudentDahbord';
 import CreateAssignment from './pages/Create Assignment';
 import Assignment from './pages/Assignments';
 import AdminRegisterUser from './pages/Register';
+import SubmitAssignment from './pages/SubmitAssignment';
+import AdminSubmissions from './pages/Adminsubmiion';
 
 const App = () => {
   return (
@@ -22,6 +24,8 @@ const App = () => {
         <Route path="/create-assignment" component={CreateAssignment} /> 
         <Route path="/assignments" component={Assignment} /> 
         <Route path="/Register" component={AdminRegisterUser} /> 
+        <Route path="/SubmitAssignment" component={SubmitAssignment} /> 
+        <Route path="/view-submission" component={AdminSubmissions} /> 
       </Switch>
     </Router>
   );

@@ -36,8 +36,8 @@ const NavbarLayout = ({ isAdmin, children }) => {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link to="/view-assignments" className="nav-link">
-                      📋 View Assignments
+                    <Link to="/view-submission" className="nav-link">
+                      📋 View submission
                     </Link>
                   </li>
                   <li className="nav-item">
@@ -66,6 +66,11 @@ const NavbarLayout = ({ isAdmin, children }) => {
                   <li className="nav-item">
                     <Link to="/grades" className="nav-link">
                       📜 Grades
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/SubmitAssignment" className="nav-link">
+                      📄 SubmitAssignment
                     </Link>
                   </li>
                 </>
