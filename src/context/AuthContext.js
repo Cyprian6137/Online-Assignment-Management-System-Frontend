@@ -33,7 +33,7 @@ const AuthProvider = ({ children }) => {
     setUser(null);
     localStorage.removeItem("token");
     toast.info("Logged out successfully");
-    history.push("/login");
+    history.push("/");
   };
 
   return (

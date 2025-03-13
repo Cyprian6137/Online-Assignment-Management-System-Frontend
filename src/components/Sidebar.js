@@ -1,8 +1,16 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Layout = ({ isAdmin, children }) => {
+  const { logout } = useAuth();
+  const history = useHistory();
+
+  const handleLogout = () => {
+    logout(history);
+  };
+
   return (
     <div className="d-flex vh-100">
       {/* Sidebar */}
@@ -59,11 +67,9 @@ const Layout = ({ isAdmin, children }) => {
         {/* Logout Fixed at Bottom */}
         <div className="mt-auto">
           <hr className="border-light" />
-          <li className="nav-item">
-            <Link to="/logout" className="nav-link text-danger fw-bold py-2 px-3 rounded sidebar-link">
-              🚪 Logout
-            </Link>
-          </li>
+          <button onClick={handleLogout} className="btn btn-danger fw-bold w-100 mt-3 shadow-sm">
+            🚪 Logout
+          </button>
         </div>
 
         {/* Sidebar Hover Effect */}
