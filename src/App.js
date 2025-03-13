@@ -7,6 +7,8 @@ import Login from './pages/Login';
 import AdminDashboard from './pages/AdminDahbord';
 import StudentDashboard from './pages/StudentDahbord';
 import CreateAssignment from './pages/Create Assignment';
+import Assignment from './pages/Assignments';
+import AdminRegisterUser from './pages/Register';
 
 const App = () => {
   return (
@@ -18,6 +20,8 @@ const App = () => {
         <Route path="/student-dashboard" component={StudentDashboard} />
         <Route path="/admin-dashboard" component={AdminDashboard} />
         <Route path="/create-assignment" component={CreateAssignment} /> 
+        <Route path="/assignments" component={Assignment} /> 
+        <Route path="/Register" component={AdminRegisterUser} /> 
       </Switch>
     </Router>
   );

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Ensure toast styles are applied
-import Layout from "../components/Sidebar";
+import NavbarLayout from "../components/NavbarLayout";
 
 const CreateAssignment = () => {
   const [title, setTitle] = useState("");
@@ -30,7 +30,7 @@ const CreateAssignment = () => {
   };
 
   return (
-    <Layout isAdmin={true}>
+    <NavbarLayout isAdmin={true}>
       <div className="container mt-4">
         <h2 className="mb-4 text-center">📝 Create Assignment</h2>
         <form onSubmit={handleSubmit} className="p-4 border rounded bg-light shadow">
@@ -72,7 +72,7 @@ const CreateAssignment = () => {
           </button>
         </form>
       </div>
-    </Layout>
+    </NavbarLayout>
   );
 };
 
