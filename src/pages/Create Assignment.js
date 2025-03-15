@@ -1,29 +1,31 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // Ensure toast styles are applied
+import { useHistory } from "react-router-dom"; // ✅ Import useHistory
+import "react-toastify/dist/ReactToastify.css";
 import NavbarLayout from "../components/NavbarLayout";
 
 const CreateAssignment = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState("");
+  const history = useHistory(); // ✅ Initialize history
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const token = localStorage.getItem("token"); // Get token for authentication
+      const token = localStorage.getItem("token");
       const response = await axios.post(
         "http://localhost:5000/api/assignments/create",
         { title, description, dueDate },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      toast.success(response.data.message || "Assignment created successfully!"); // ✅ Use API message
-      setTitle("");
-      setDescription("");
-      setDueDate("");
+      toast.success(response.data.message || "Assignment created successfully!");
+
+      // ✅ Redirect admin to dashboard after successful assignment creation
+      history.push("/admin-dashboard");
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to create assignment");
     }
@@ -57,9 +59,9 @@ const CreateAssignment = () => {
           </div>
 
           <div className="mb-3">
-            <label className="form-label fw-bold">Due Date:</label>
+            <label className="form-label fw-bold">Due Date & Time:</label>
             <input
-              type="date"
+              type="datetime-local" // ✅ Allows both date & time selection
               className="form-control"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
