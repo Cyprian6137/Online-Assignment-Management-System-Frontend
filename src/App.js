@@ -11,6 +11,7 @@ import Assignment from './pages/Assignments';
 import AdminRegisterUser from './pages/Register';
 import SubmitAssignment from './pages/SubmitAssignment';
 import AdminSubmissions from './pages/Adminsubmiion';
+import ViewResults from './pages/ViewResults';
 
 const App = () => {
   return (
@@ -24,8 +25,9 @@ const App = () => {
         <Route path="/create-assignment" component={CreateAssignment} /> 
         <Route path="/assignments" component={Assignment} /> 
         <Route path="/Register" component={AdminRegisterUser} /> 
-        <Route path="/SubmitAssignment" component={SubmitAssignment} /> 
+        <Route path="/SubmitAssignment/:id" component={SubmitAssignment} /> 
         <Route path="/view-submission" component={AdminSubmissions} /> 
+        <Route path="/view-results" component={ViewResults} /> 
       </Switch>
     </Router>
   );

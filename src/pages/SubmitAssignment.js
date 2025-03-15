@@ -5,58 +5,82 @@ import { useHistory, useParams } from "react-router-dom";
 import NavbarLayout from "../components/NavbarLayout";
 
 const AssignmentDetail = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // Get assignment ID from URL
   const [assignment, setAssignment] = useState(null);
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(true);
   const history = useHistory();
 
   useEffect(() => {
+    console.log("Fetching assignment for ID:", id); // Debugging
+
     const fetchAssignment = async () => {
+      if (!id) {
+        toast.error("Invalid or missing assignment ID.");
+        setLoading(false);
+        return;
+      }
+
       try {
         const token = localStorage.getItem("token");
         const { data } = await axios.get(`http://localhost:5000/api/assignments/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+
+        console.log("Fetched Assignment Data:", data); // Debugging
         setAssignment(data);
       } catch (error) {
+        console.error("Error fetching assignment:", error.response?.data); // Debugging
         toast.error(error.response?.data?.message || "Failed to load assignment");
       } finally {
         setLoading(false);
       }
     };
+
     fetchAssignment();
   }, [id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
+    if (!id) {
+      toast.error("Invalid assignment ID. Cannot submit.");
+      return;
+    }
+
     const confirmSubmit = window.confirm("Are you sure you want to submit this assignment?");
     if (!confirmSubmit) return;
 
     try {
       const token = localStorage.getItem("token");
-      await axios.post("http://localhost:5000/api/submissions/submit", {
-        assignmentId: id,
-        content,
-      }, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      
+      const { data } = await axios.post(
+        "http://localhost:5000/api/submissions/submit",
+        {
+          assignmentId: id,
+          content,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      console.log("Submission response:", data); // Debugging
       toast.success("Assignment submitted successfully");
-      history.push("/assignments");
+      history.push("/student-dashboard");
     } catch (error) {
+      console.error("Submission error:", error.response?.data); // Debugging
       toast.error(error.response?.data?.message || "Failed to submit assignment");
     }
   };
 
-  if (loading) return (
-    <div className="text-center">
-      <div className="spinner-border text-primary" role="status">
-        <span className="visually-hidden">Loading...</span>
+  if (loading)
+    return (
+      <div className="text-center">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
       </div>
-    </div>
-  );
+    );
 
   return (
     <NavbarLayout isAdmin={false}>

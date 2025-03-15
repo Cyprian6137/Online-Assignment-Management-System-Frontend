@@ -65,7 +65,7 @@ const NavbarLayout = ({ isAdmin, children }) => {
                   </li>
                   <li className="nav-item">
                     <Link to="/grades" className="nav-link">
-                      📜 Grades
+                      📜 Questions
                     </Link>
                   </li>
                   <li className="nav-item">

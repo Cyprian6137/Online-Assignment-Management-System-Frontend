@@ -39,30 +39,35 @@ const AssignmentList = () => {
         ) : assignments.length === 0 ? (
           <p className="text-center text-muted">No assignments available.</p>
         ) : (
-          <div className="row">
-            {assignments.map((assignment) => (
-              <div key={assignment._id} className="col-md-6 mb-3">
-                <div className="card shadow-sm">
-                  <div className="card-body">
-                    <h5 className="card-title fw-bold">{assignment.title}</h5>
-                    <p className="card-text">{assignment.description}</p>
-                    <p className="text-muted">
-                      <strong>Due Date:</strong> {new Date(assignment.dueDate).toLocaleDateString()}
-                    </p>
-                    <p className="text-muted">
-                      <strong>Status:</strong> {assignment.submitted ? "✅ Submitted" : "❌ Not Submitted"}
-                    </p>
+          <table className="table table-bordered table-striped">
+            <thead className="table-dark">
+              <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {assignments.map((assignment) => (
+                <tr key={assignment._id}>
+                  <td>{assignment.title}</td>
+                  <td>{assignment.description}</td>
+                  <td>{new Date(assignment.dueDate).toLocaleDateString()}</td>
+                  <td>{assignment.submitted ? "✅ Submitted" : "❌ Not Submitted"}</td>
+                  <td>
                     <button
                       className="btn btn-primary"
-                      onClick={() => history.push(`/assignments/${assignment._id}`)}
+                      onClick={() => history.push(`/SubmitAssignment/${assignment._id}`)}
                     >
                       {assignment.submitted ? "View Submission" : "Start Assignment"}
                     </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
     </NavbarLayout>
