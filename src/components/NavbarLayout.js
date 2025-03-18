@@ -41,8 +41,8 @@ const NavbarLayout = ({ isAdmin, children }) => {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link to="/award-grades" className="nav-link">
-                      🏅 Award Grades
+                    <Link to="/Manage-Assignment" className="nav-link">
+                      🏅 Manage Assignment
                     </Link>
                   </li>
                   <li className="nav-item">

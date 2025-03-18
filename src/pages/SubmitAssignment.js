@@ -12,8 +12,6 @@ const AssignmentDetail = () => {
   const history = useHistory();
 
   useEffect(() => {
-    console.log("Fetching assignment for ID:", id); // Debugging
-
     const fetchAssignment = async () => {
       if (!id) {
         toast.error("Invalid or missing assignment ID.");
@@ -27,10 +25,8 @@ const AssignmentDetail = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        console.log("Fetched Assignment Data:", data); // Debugging
         setAssignment(data);
       } catch (error) {
-        console.error("Error fetching assignment:", error.response?.data); // Debugging
         toast.error(error.response?.data?.message || "Failed to load assignment");
       } finally {
         setLoading(false);
@@ -53,22 +49,20 @@ const AssignmentDetail = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const { data } = await axios.post(
+      await axios.post(
         "http://localhost:5000/api/submissions/submit",
-        {
-          assignmentId: id,
-          content,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { assignmentId: id, content },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      console.log("Submission response:", data); // Debugging
       toast.success("Assignment submitted successfully");
+
+      // Remove the submitted assignment from the local state
+      setAssignment(null);
+
+      // Redirect to student dashboard
       history.push("/student-dashboard");
     } catch (error) {
-      console.error("Submission error:", error.response?.data); // Debugging
       toast.error(error.response?.data?.message || "Failed to submit assignment");
     }
   };
@@ -81,6 +75,8 @@ const AssignmentDetail = () => {
         </div>
       </div>
     );
+
+  if (!assignment) return <p className="text-center text-danger">Assignment not available.</p>;
 
   return (
     <NavbarLayout isAdmin={false}>

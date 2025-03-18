@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import NavbarLayout from "../components/NavbarLayout"; // Adjust path if needed
+import NavbarLayout from "../components/NavbarLayout";
 
 const AdminSubmissions = () => {
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [grades, setGrades] = useState({}); // Stores grades per submission
-  const [feedbacks, setFeedbacks] = useState({}); // Stores feedback per submission
+  const [grades, setGrades] = useState({});
+  const [feedbacks, setFeedbacks] = useState({});
 
   useEffect(() => {
     const fetchSubmissions = async () => {
@@ -41,12 +41,16 @@ const AdminSubmissions = () => {
       );
       toast.success("Submission graded successfully");
 
-      // Remove the graded submission from the list
+      // Update the submission list with the grade and feedback
       setSubmissions((prevSubmissions) =>
-        prevSubmissions.filter((submission) => submission._id !== submissionId)
+        prevSubmissions.map((submission) =>
+          submission._id === submissionId
+            ? { ...submission, grade: grades[submissionId], feedback: feedbacks[submissionId] }
+            : submission
+        )
       );
 
-      // Remove grade & feedback for that submission from state
+      // Clear the grade & feedback input fields
       setGrades((prev) => {
         const updatedGrades = { ...prev };
         delete updatedGrades[submissionId];
@@ -69,47 +73,75 @@ const AdminSubmissions = () => {
         <h2 className="mb-4 text-center">📊 Student Submissions</h2>
         {loading ? (
           <p className="text-center">Loading...</p>
+        ) : submissions.length === 0 ? (
+          <p className="text-center">No submissions found.</p>
         ) : (
-          <ul className="list-group">
-            {submissions.map((submission) => (
-              <li key={submission._id} className="list-group-item">
-                <p>
-                  <strong>Student:</strong> {submission?.studentId?.name || "Unknown"}
-                </p>
-                <p>
-                  <strong>Assignment:</strong> {submission?.assignmentId?.title || "No Title"}
-                </p>
-                <p>
-                  <strong>Content:</strong> {submission.content}
-                </p>
-                <div className="mb-2">
-                  <input
-                    type="number"
-                    className="form-control mb-2"
-                    placeholder="Grade"
-                    value={grades[submission._id] || ""}
-                    onChange={(e) =>
-                      setGrades({ ...grades, [submission._id]: e.target.value })
-                    }
-                  />
-                  <textarea
-                    className="form-control"
-                    placeholder="Feedback"
-                    value={feedbacks[submission._id] || ""}
-                    onChange={(e) =>
-                      setFeedbacks({ ...feedbacks, [submission._id]: e.target.value })
-                    }
-                  ></textarea>
-                </div>
-                <button
-                  className="btn btn-success mt-2"
-                  onClick={() => handleGrade(submission._id)}
-                >
-                  Submit Grade
-                </button>
-              </li>
-            ))}
-          </ul>
+          <div className="table-responsive">
+            <table className="table table-bordered table-striped">
+              <thead className="table-dark">
+                <tr>
+                  <th>#</th>
+                  <th>Student</th>
+                  <th>Assignment</th>
+                  <th>Content</th>
+                  <th>Grade</th>
+                  <th>Feedback</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {submissions.map((submission, index) => (
+                  <tr key={submission._id}>
+                    <td>{index + 1}</td>
+                    <td>{submission?.studentId?.name || "Unknown"}</td>
+                    <td>{submission?.assignmentId?.title || "No Title"}</td>
+                    <td>{submission.content}</td>
+                    <td>
+                      {submission.grade ? (
+                        <span className="fw-bold">{submission.grade}</span>
+                      ) : (
+                        <input
+                          type="number"
+                          className="form-control"
+                          placeholder="Grade"
+                          value={grades[submission._id] || ""}
+                          onChange={(e) =>
+                            setGrades({ ...grades, [submission._id]: e.target.value })
+                          }
+                        />
+                      )}
+                    </td>
+                    <td>
+                      {submission.feedback ? (
+                        <span>{submission.feedback}</span>
+                      ) : (
+                        <textarea
+                          className="form-control"
+                          placeholder="Feedback"
+                          value={feedbacks[submission._id] || ""}
+                          onChange={(e) =>
+                            setFeedbacks({ ...feedbacks, [submission._id]: e.target.value })
+                          }
+                        ></textarea>
+                      )}
+                    </td>
+                    <td>
+                      {!submission.grade ? (
+                        <button
+                          className="btn btn-success"
+                          onClick={() => handleGrade(submission._id)}
+                        >
+                          Submit Grade
+                        </button>
+                      ) : (
+                        <span className="text-success">Graded ✅</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </NavbarLayout>

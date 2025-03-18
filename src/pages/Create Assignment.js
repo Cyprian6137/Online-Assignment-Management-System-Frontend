@@ -59,9 +59,9 @@ const CreateAssignment = () => {
           </div>
 
           <div className="mb-3">
-            <label className="form-label fw-bold">Due Date & Time:</label>
+            <label className="form-label fw-bold">Due Date </label>
             <input
-              type="datetime-local" // ✅ Allows both date & time selection
+              type="date" // ✅ Allows both date & time selection
               className="form-control"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}

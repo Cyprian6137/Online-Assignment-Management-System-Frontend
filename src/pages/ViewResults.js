@@ -34,13 +34,12 @@ const ViewResults = () => {
           <p className="text-center">No graded assignments available.</p>
         ) : (
           <div className="table-responsive">
-            <table className="table table-bordered">
-              <thead className="thead-dark">
+            <table className="table table-bordered table-striped">
+              <thead className="table-dark">
                 <tr>
                   <th>Assignment</th>
                   <th>Grade</th>
                   <th>Feedback</th>
-                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -49,13 +48,6 @@ const ViewResults = () => {
                     <td>{result.assignmentId?.title || "Unknown"}</td>
                     <td>{result.grade ? `${result.grade}/100` : "Not Graded"}</td>
                     <td>{result.feedback || "No Feedback"}</td>
-                    <td>
-                      {result.grade ? (
-                        <span className="badge badge-success">Graded</span>
-                      ) : (
-                        <span className="badge badge-warning">Pending</span>
-                      )}
-                    </td>
                   </tr>
                 ))}
               </tbody>

@@ -12,6 +12,7 @@ import AdminRegisterUser from './pages/Register';
 import SubmitAssignment from './pages/SubmitAssignment';
 import AdminSubmissions from './pages/Adminsubmiion';
 import ViewResults from './pages/ViewResults';
+import ManageAssignments from './pages/ManageAssignment';
 
 const App = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
         <Route path="/SubmitAssignment/:id" component={SubmitAssignment} /> 
         <Route path="/view-submission" component={AdminSubmissions} /> 
         <Route path="/view-results" component={ViewResults} /> 
+        <Route path="/Manage-Assignment" component={ManageAssignments} /> 
       </Switch>
     </Router>
   );
