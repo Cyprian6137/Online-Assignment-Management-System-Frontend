@@ -5,7 +5,7 @@ import { useHistory, useParams } from "react-router-dom";
 import NavbarLayout from "../components/NavbarLayout";
 
 const AssignmentDetail = () => {
-  const { id } = useParams(); // Get assignment ID from URL
+  const { id } = useParams();
   const [assignment, setAssignment] = useState(null);
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(true);
@@ -18,13 +18,11 @@ const AssignmentDetail = () => {
         setLoading(false);
         return;
       }
-
       try {
         const token = localStorage.getItem("token");
         const { data } = await axios.get(`http://localhost:5000/api/assignments/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-
         setAssignment(data);
       } catch (error) {
         toast.error(error.response?.data?.message || "Failed to load assignment");
@@ -32,21 +30,16 @@ const AssignmentDetail = () => {
         setLoading(false);
       }
     };
-
     fetchAssignment();
   }, [id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!id) {
       toast.error("Invalid assignment ID. Cannot submit.");
       return;
     }
-
-    const confirmSubmit = window.confirm("Are you sure you want to submit this assignment?");
-    if (!confirmSubmit) return;
-
+    if (!window.confirm("Are you sure you want to submit this assignment?")) return;
     try {
       const token = localStorage.getItem("token");
       await axios.post(
@@ -54,13 +47,8 @@ const AssignmentDetail = () => {
         { assignmentId: id, content },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-
       toast.success("Assignment submitted successfully");
-
-      // Remove the submitted assignment from the local state
       setAssignment(null);
-
-      // Redirect to student dashboard
       history.push("/student-dashboard");
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to submit assignment");
@@ -69,33 +57,37 @@ const AssignmentDetail = () => {
 
   if (loading)
     return (
-      <div className="text-center">
+      <div className="text-center mt-5">
         <div className="spinner-border text-primary" role="status">
           <span className="visually-hidden">Loading...</span>
         </div>
       </div>
     );
 
-  if (!assignment) return <p className="text-center text-danger">Assignment not available.</p>;
+  if (!assignment) return <p className="text-center text-danger mt-5">Assignment not available.</p>;
 
   return (
     <NavbarLayout isAdmin={false}>
       <div className="container mt-4">
         <h2 className="mb-4 text-center">📝 {assignment?.title}</h2>
-        <p>{assignment?.description}</p>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label className="form-label">Your Answer</label>
-            <textarea
-              className="form-control"
-              rows="5"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              required
-            ></textarea>
+        <p className="text-muted text-center">{assignment?.description}</p>
+        <div className="row justify-content-center">
+          <div className="col-md-8 col-lg-6">
+            <form onSubmit={handleSubmit} className="p-4 border rounded bg-light">
+              <div className="mb-3">
+                <label className="form-label fw-bold">Your Answer</label>
+                <textarea
+                  className="form-control"
+                  rows="5"
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  required
+                ></textarea>
+              </div>
+              <button type="submit" className="btn btn-success w-100">Submit Assignment</button>
+            </form>
           </div>
-          <button type="submit" className="btn btn-success">Submit Assignment</button>
-        </form>
+        </div>
       </div>
     </NavbarLayout>
   );
