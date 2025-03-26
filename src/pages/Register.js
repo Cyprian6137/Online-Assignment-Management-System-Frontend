@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom"; // Import useHistory
 import axios from "axios";
 import { toast } from "react-toastify";
 import NavbarLayout from "../components/NavbarLayout";
 
 const AdminRegisterUser = () => {
+  const history = useHistory(); // Initialize history
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -13,12 +15,10 @@ const AdminRegisterUser = () => {
 
   const [loading, setLoading] = useState(false);
 
-  // Handle input changes
   const handleChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -32,6 +32,9 @@ const AdminRegisterUser = () => {
 
       toast.success(data.message);
       setUserData({ name: "", email: "", password: "", role: "student" }); // Reset form
+
+      // Redirect to Admin Dashboard after successful registration
+      history.push("/admin-dashboard");
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to register user");
     } finally {

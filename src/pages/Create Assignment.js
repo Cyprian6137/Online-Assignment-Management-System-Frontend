@@ -25,7 +25,7 @@ const CreateAssignment = () => {
       toast.success(response.data.message || "Assignment created successfully!");
 
       // Redirect to lecturer dashboard after successful assignment creation
-      history.push("/lecture-dashboard");
+      history.push("/lecturer-dashboard");
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to create assignment");
     }
