@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js"; // ✅ Ensure Bootstrap JS is loaded
 
 const NavbarLayout = ({ isAdmin, children }) => {
   const { logout } = useAuth();
   const history = useHistory();
+  const [isOpen, setIsOpen] = useState(false); // ✅ Track navbar state
 
   const handleLogout = () => {
     logout(history);
@@ -13,14 +15,24 @@ const NavbarLayout = ({ isAdmin, children }) => {
 
   return (
     <div>
-      {/* ✅ Navbar stays fixed at the top */}
+      {/* ✅ Responsive Navbar */}
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm fixed-top">
         <div className="container">
           <Link to={isAdmin ? "/admin-dashboard" : "/student-dashboard"} className="navbar-brand fw-bold">
             📚 {isAdmin ? "Admin" : "Student"} Panel
           </Link>
-
-          <div className="collapse navbar-collapse">
+          
+          {/* ✅ Toggle Button */}
+          <button
+            className="navbar-toggler"
+            type="button"
+            onClick={() => setIsOpen(!isOpen)} // ✅ Manually toggle state
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          
+          {/* ✅ Show/Hide Navbar Content Manually */}
+          <div className={`collapse navbar-collapse ${isOpen ? "show" : ""}`} id="navbarNav">
             <ul className="navbar-nav me-auto">
               <li className="nav-item">
                 <Link to={isAdmin ? "/admin-dashboard" : "/student-dashboard"} className="nav-link">
@@ -37,7 +49,7 @@ const NavbarLayout = ({ isAdmin, children }) => {
                   </li>
                   <li className="nav-item">
                     <Link to="/view-submission" className="nav-link">
-                      📋 View submission
+                      📋 View Submission
                     </Link>
                   </li>
                   <li className="nav-item">
@@ -47,7 +59,7 @@ const NavbarLayout = ({ isAdmin, children }) => {
                   </li>
                   <li className="nav-item">
                     <Link to="/Register" className="nav-link">
-                    👤 Register a New User
+                      👤 Register a New User
                     </Link>
                   </li>
                 </>
@@ -70,7 +82,7 @@ const NavbarLayout = ({ isAdmin, children }) => {
                   </li>
                   <li className="nav-item">
                     <Link to="/SubmitAssignment" className="nav-link">
-                      📄 SubmitAssignment
+                      📄 Submit Assignment
                     </Link>
                   </li>
                 </>

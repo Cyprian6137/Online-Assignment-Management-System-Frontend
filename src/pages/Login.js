@@ -26,48 +26,52 @@ const Login = () => {
   };
 
   return (
-    <div className="container d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
-      <div className="card p-4 shadow-lg d-flex flex-row" style={{ maxWidth: "700px", width: "100%" }}>
-        {/* Left Section: Logo */}
-        <div className="d-flex flex-column align-items-center justify-content-center px-4" style={{ flex: 1 }}>
-          <img src={logo} alt="Logo" style={{ width: "200px" }} />
-        </div>
-
-        {/* Red Divider Line */}
-        <div style={{ width: "4px", backgroundColor: "red" }}></div>
-        
-        {/* Right Section: Login Form */}
-        <div className="px-4" style={{ flex: 2 }}>
-          <h2 className="text-center mb-4">Login</h2>
-          <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label htmlFor="email" className="form-label">Email</label>
-              <input
-                type="email"
-                id="email"
-                className="form-control"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="password" className="form-label">Password</label>
-              <input
-                type="password"
-                id="password"
-                className="form-control"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <button type="submit" className="btn btn-primary w-100" disabled={loading}>
-              {loading ? "Logging In..." : "Login"}
-            </button>
-          </form>
+    <div className="container d-flex justify-content-center align-items-center vh-100">
+      <div className="card p-4 shadow-lg w-100" style={{ maxWidth: "700px" }}>
+        <div className="row g-0">
+          {/* Left Section: Logo */}
+          <div className="col-md-5 d-flex flex-column align-items-center justify-content-center p-3">
+            <img src={logo} alt="Logo" className="img-fluid" style={{ maxWidth: "150px" }} />
+          </div>
+          
+          {/* Red Divider Line
+          <div className="col-md-1 d-flex align-items-center">
+            <div className="w-100" style={{ height: "10px", backgroundColor: "red" }}></div>
+          </div> */}
+          
+          {/* Right Section: Login Form */}
+          <div className="col-md-6 p-3">
+            <h2 className="text-center mb-4">Login</h2>
+            <form onSubmit={handleSubmit}>
+              <div className="mb-3">
+                <label htmlFor="email" className="form-label">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  className="form-control"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="password" className="form-label">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  className="form-control"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
+              <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+                {loading ? "Logging In..." : "Login"}
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
