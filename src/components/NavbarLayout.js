@@ -65,6 +65,9 @@ const NavbarLayout = ({ children }) => {
                     <Link to="/all-students" className="nav-link">
                       📄 All Students
                     </Link>
+                    <Link to="/all-lectures" className="nav-link">
+                      📄 All Lectures
+                    </Link>
                   </li>
                 </>
               ) : isLecturer ? (

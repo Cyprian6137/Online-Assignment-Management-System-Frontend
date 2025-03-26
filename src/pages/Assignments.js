@@ -16,10 +16,8 @@ const LecturerAssignmentList = () => {
         const { data } = await axios.get("http://localhost:5000/api/assignments", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        console.log("Fetched assignments:", data);
         setAssignments(data);
       } catch (error) {
-        console.error("Error fetching assignments:", error);
         toast.error(error.response?.data?.message || "Failed to load assignments");
       } finally {
         setLoading(false);
@@ -60,7 +58,7 @@ const LecturerAssignmentList = () => {
                     <td>{assignment.description}</td>
                     <td>{new Date(assignment.dueDate).toLocaleDateString()}</td>
                     <td>
-                      {assignment.submitted ? (
+                      {assignment.submittedBy.some(submission => submission.user === localStorage.getItem("userId")) ? (
                         <span className="text-success fw-bold">✅ Submitted</span>
                       ) : (
                         <span className="text-danger fw-bold">❌ Not Submitted</span>
@@ -68,10 +66,11 @@ const LecturerAssignmentList = () => {
                     </td>
                     <td>
                       <button
-                        className="btn btn-primary btn-sm w-100"
+                        className={`btn ${assignment.submittedBy.some(submission => submission.user === localStorage.getItem("userId")) ? "btn-secondary" : "btn-primary"} btn-sm w-100`}
                         onClick={() => history.push(`/SubmitAssignment/${assignment._id}`)}
+                        disabled={assignment.submittedBy.some(submission => submission.user === localStorage.getItem("userId"))}
                       >
-                        {assignment.submitted ? "View Submission" : "Start Assignment"}
+                        {assignment.submittedBy.some(submission => submission.user === localStorage.getItem("userId")) ? "Submitted" : "Start Assignment"}
                       </button>
                     </td>
                   </tr>
