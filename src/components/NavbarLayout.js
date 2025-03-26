@@ -62,11 +62,8 @@ const NavbarLayout = ({ children }) => {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link to="/all-students" className="nav-link">
-                      📄 All Students
-                    </Link>
-                    <Link to="/all-lectures" className="nav-link">
-                      📄 All Lectures
+                    <Link to="/Students Management" className="nav-link">
+                    👩‍🎓 User Management
                     </Link>
                   </li>
                 </>

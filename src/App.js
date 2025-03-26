@@ -14,6 +14,7 @@ import ViewResults from './pages/ViewResults';
 import ManageAssignments from './pages/ManageAssignment';
 import LecturerDashboard from './pages/LecturesDashbord';
 import LecturerSubmissions from './pages/Adminsubmiion';
+import ManageUsers from './pages/ManageUsers';
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
         <Route path="/admin-dashboard" component={AdminDashboard} />
         <Route path="/lecturer-dashboard" component={LecturerDashboard} />
         <Route path="/create-assignment" component={CreateAssignment} /> 
+        <Route path="/Students Management" component={ManageUsers} /> 
         <Route path="/assignments" component={Assignment} /> 
         <Route path="/register-user" component={AdminRegisterUser} /> 
         <Route path="/SubmitAssignment/:id" component={SubmitAssignment} /> 
