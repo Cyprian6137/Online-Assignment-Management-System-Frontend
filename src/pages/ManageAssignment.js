@@ -74,44 +74,52 @@ const ManageAssignments = () => {
         ) : assignments.length === 0 ? (
           <p className="text-center">No assignments available.</p>
         ) : (
-          <table className="table table-bordered">
-            <thead className="thead-dark">
-              <tr>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Due Date</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {assignments.map((assignment) => (
-                <tr key={assignment._id}>
-                  <td>{assignment.title}</td>
-                  <td>{assignment.description}</td>
-                  <td>{new Date(assignment.dueDate).toLocaleDateString()}</td>
-                  <td>
-                    <button className="btn btn-primary btn-sm mx-1" onClick={() => handleEdit(assignment)}>
-                      Edit
-                    </button>
-                    <button className="btn btn-danger btn-sm" onClick={() => handleDelete(assignment._id)}>
-                      Delete
-                    </button>
-                  </td>
+          <div className="table-responsive"> {/* ✅ Enables horizontal scroll on mobile */}
+            <table className="table table-bordered">
+              <thead className="thead-dark">
+                <tr>
+                  <th>Title</th>
+                  <th>Description</th>
+                  <th>Due Date</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {assignments.map((assignment) => (
+                  <tr key={assignment._id}>
+                    <td>{assignment.title}</td>
+                    <td>{assignment.description}</td>
+                    <td>{new Date(assignment.dueDate).toLocaleDateString()}</td>
+                    <td className="d-flex flex-wrap"> {/* ✅ Ensures buttons stack on mobile */}
+                      <button className="btn btn-primary btn-sm m-1" onClick={() => handleEdit(assignment)}>
+                        Edit
+                      </button>
+                      <button className="btn btn-danger btn-sm m-1" onClick={() => handleDelete(assignment._id)}>
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
 
         {editingAssignment && (
           <div className="mt-4 p-3 border rounded bg-light">
             <h4>Edit Assignment</h4>
-            <label className="form-label">Description</label>
-            <textarea className="form-control" value={newDescription} onChange={(e) => setNewDescription(e.target.value)}></textarea>
-            <label className="form-label mt-2">Extend Due Date</label>
-            <input type="date" className="form-control" value={newDueDate} onChange={(e) => setNewDueDate(e.target.value)} />
-            <button className="btn btn-success mt-3" onClick={handleUpdate}>Update</button>
-            <button className="btn btn-secondary mt-3 mx-2" onClick={() => setEditingAssignment(null)}>Cancel</button>
+            <div className="mb-3">
+              <label className="form-label">Description</label>
+              <textarea className="form-control" value={newDescription} onChange={(e) => setNewDescription(e.target.value)}></textarea>
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Extend Due Date</label>
+              <input type="date" className="form-control" value={newDueDate} onChange={(e) => setNewDueDate(e.target.value)} />
+            </div>
+            <div className="d-flex flex-wrap">
+              <button className="btn btn-success m-1 w-100" onClick={handleUpdate}>Update</button> {/* ✅ Full-width on small screens */}
+              <button className="btn btn-secondary m-1 w-100" onClick={() => setEditingAssignment(null)}>Cancel</button> {/* ✅ Full-width on small screens */}
+            </div>
           </div>
         )}
       </div>

@@ -8,8 +8,8 @@ const AdminDashboard = () => {
         <h1 className="text-center fw-bold text-primary">Welcome, Admin!</h1>
 
         {/* Dashboard Overview Cards */}
-        <div className="row mt-4">
-          <div className="col-md-4">
+        <div className="row mt-4 g-3"> {/* ✅ g-3 adds spacing between cards */}
+          <div className="col-lg-4 col-md-6">
             <div className="card shadow-lg border-0 rounded-4">
               <div className="card-body text-center">
                 <h5 className="card-title text-secondary fw-bold">Total Assignments</h5>
@@ -18,7 +18,7 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          <div className="col-md-4">
+          <div className="col-lg-4 col-md-6">
             <div className="card shadow-lg border-0 rounded-4">
               <div className="card-body text-center">
                 <h5 className="card-title text-secondary fw-bold">Pending Submissions</h5>
@@ -27,7 +27,7 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          <div className="col-md-4">
+          <div className="col-lg-4 col-md-12"> {/* ✅ Ensures stacking on small screens */}
             <div className="card shadow-lg border-0 rounded-4">
               <div className="card-body text-center">
                 <h5 className="card-title text-secondary fw-bold">Students Enrolled</h5>
@@ -40,37 +40,39 @@ const AdminDashboard = () => {
         {/* Recent Submissions Table */}
         <div className="mt-5">
           <h4 className="fw-bold">Recent Submissions</h4>
-          <table className="table table-striped shadow-sm rounded-3">
-            <thead className="bg-primary text-white">
-              <tr>
-                <th>#</th>
-                <th>Student</th>
-                <th>Assignment</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>John Doe</td>
-                <td>Math Assignment</td>
-                <td className="text-success fw-bold">Submitted</td>
-                <td>
-                  <button className="btn btn-sm btn-outline-primary">View</button>
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Jane Smith</td>
-                <td>Science Report</td>
-                <td className="text-danger fw-bold">Pending</td>
-                <td>
-                  <button className="btn btn-sm btn-outline-primary">View</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div className="table-responsive"> {/* ✅ Enables horizontal scroll on small screens */}
+            <table className="table table-striped shadow-sm rounded-3">
+              <thead className="bg-primary text-white">
+                <tr>
+                  <th>#</th>
+                  <th>Student</th>
+                  <th>Assignment</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>John Doe</td>
+                  <td>Math Assignment</td>
+                  <td className="text-success fw-bold">Submitted</td>
+                  <td>
+                    <button className="btn btn-sm btn-outline-primary w-100">View</button> {/* ✅ Full-width on mobile */}
+                  </td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Jane Smith</td>
+                  <td>Science Report</td>
+                  <td className="text-danger fw-bold">Pending</td>
+                  <td>
+                    <button className="btn btn-sm btn-outline-primary w-100">View</button> {/* ✅ Full-width on mobile */}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </NavbarLayout>
