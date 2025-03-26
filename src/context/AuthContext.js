@@ -18,8 +18,10 @@ const AuthProvider = ({ children }) => {
       localStorage.setItem("token", data.token);
       toast.success("Login successful!");
 
-      if (data.user.role === "admin") { // Correct role access
+      if (data.user.role === "admin") {
         history.push("/admin-dashboard");
+      } else if (data.user.role === "lecture") {
+        history.push("/lecture-dashboard");
       } else {
         history.push("/student-dashboard");
       }
