@@ -84,6 +84,7 @@ const AdminRegisterUser = () => {
             <label className="form-label">Role</label>
             <select className="form-control" name="role" value={userData.role} onChange={handleChange}>
               <option value="student">Student</option>
+              <option value="lecturer">Lecturer</option>
               <option value="admin">Admin</option>
             </select>
           </div>

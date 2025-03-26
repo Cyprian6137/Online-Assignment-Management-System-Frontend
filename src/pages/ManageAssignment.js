@@ -66,7 +66,7 @@ const ManageAssignments = () => {
   };
 
   return (
-    <NavbarLayout isAdmin={true}>
+    <NavbarLayout isAdmin={false} isLecturer={true}>
       <div className="container mt-4">
         <h2 className="text-center">📚 Manage Assignments</h2>
         {loading ? (
@@ -74,7 +74,7 @@ const ManageAssignments = () => {
         ) : assignments.length === 0 ? (
           <p className="text-center">No assignments available.</p>
         ) : (
-          <div className="table-responsive"> {/* ✅ Enables horizontal scroll on mobile */}
+          <div className="table-responsive">
             <table className="table table-bordered">
               <thead className="thead-dark">
                 <tr>
@@ -90,7 +90,7 @@ const ManageAssignments = () => {
                     <td>{assignment.title}</td>
                     <td>{assignment.description}</td>
                     <td>{new Date(assignment.dueDate).toLocaleDateString()}</td>
-                    <td className="d-flex flex-wrap"> {/* ✅ Ensures buttons stack on mobile */}
+                    <td className="d-flex flex-wrap">
                       <button className="btn btn-primary btn-sm m-1" onClick={() => handleEdit(assignment)}>
                         Edit
                       </button>
@@ -117,8 +117,8 @@ const ManageAssignments = () => {
               <input type="date" className="form-control" value={newDueDate} onChange={(e) => setNewDueDate(e.target.value)} />
             </div>
             <div className="d-flex flex-wrap">
-              <button className="btn btn-success m-1 w-100" onClick={handleUpdate}>Update</button> {/* ✅ Full-width on small screens */}
-              <button className="btn btn-secondary m-1 w-100" onClick={() => setEditingAssignment(null)}>Cancel</button> {/* ✅ Full-width on small screens */}
+              <button className="btn btn-success m-1 w-100" onClick={handleUpdate}>Update</button>
+              <button className="btn btn-secondary m-1 w-100" onClick={() => setEditingAssignment(null)}>Cancel</button>
             </div>
           </div>
         )}

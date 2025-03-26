@@ -10,9 +10,10 @@ import CreateAssignment from './pages/Create Assignment';
 import Assignment from './pages/Assignments';
 import AdminRegisterUser from './pages/Register';
 import SubmitAssignment from './pages/SubmitAssignment';
-import AdminSubmissions from './pages/Adminsubmiion';
 import ViewResults from './pages/ViewResults';
 import ManageAssignments from './pages/ManageAssignment';
+import LecturerDashboard from './pages/LecturesDashbord';
+import LecturerSubmissions from './pages/Adminsubmiion';
 
 const App = () => {
   return (
@@ -23,13 +24,14 @@ const App = () => {
         <Route exact path="/" component={Login} />
         <Route path="/student-dashboard" component={StudentDashboard} />
         <Route path="/admin-dashboard" component={AdminDashboard} />
+        <Route path="/lecturer-dashboard" component={LecturerDashboard} />
         <Route path="/create-assignment" component={CreateAssignment} /> 
         <Route path="/assignments" component={Assignment} /> 
-        <Route path="/Register" component={AdminRegisterUser} /> 
+        <Route path="/register-user" component={AdminRegisterUser} /> 
         <Route path="/SubmitAssignment/:id" component={SubmitAssignment} /> 
-        <Route path="/view-submission" component={AdminSubmissions} /> 
+        <Route path="/view-submission" component={LecturerSubmissions} /> 
         <Route path="/view-results" component={ViewResults} /> 
-        <Route path="/Manage-Assignment" component={ManageAssignments} /> 
+        <Route path="/manage-assignment" component={ManageAssignments} /> 
       </Switch>
     </Router>
   );

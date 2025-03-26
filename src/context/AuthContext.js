@@ -20,8 +20,8 @@ const AuthProvider = ({ children }) => {
 
       if (data.user.role === "admin") {
         history.push("/admin-dashboard");
-      } else if (data.user.role === "lecture") {
-        history.push("/lecture-dashboard");
+      } else if (data.user.role === "lecturer") { // ✅ Fixed role check
+        history.push("/lecturer-dashboard");
       } else {
         history.push("/student-dashboard");
       }

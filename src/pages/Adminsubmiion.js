@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import NavbarLayout from "../components/NavbarLayout";
 
-const AdminSubmissions = () => {
+const LecturerSubmissions = () => {
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [grades, setGrades] = useState({});
@@ -41,7 +41,6 @@ const AdminSubmissions = () => {
       );
       toast.success("Submission graded successfully");
 
-      // Update the submission list with the grade and feedback
       setSubmissions((prevSubmissions) =>
         prevSubmissions.map((submission) =>
           submission._id === submissionId
@@ -50,7 +49,6 @@ const AdminSubmissions = () => {
         )
       );
 
-      // Clear the grade & feedback input fields
       setGrades((prev) => {
         const updatedGrades = { ...prev };
         delete updatedGrades[submissionId];
@@ -68,9 +66,9 @@ const AdminSubmissions = () => {
   };
 
   return (
-    <NavbarLayout isAdmin={true}>
+    <NavbarLayout isLecturer={true}>
       <div className="container mt-4">
-        <h2 className="mb-4 text-center">📊 Student Submissions</h2>
+        <h2 className="mb-4 text-center">📊 Lecturer/Admin Submissions</h2>
         {loading ? (
           <p className="text-center">Loading...</p>
         ) : submissions.length === 0 ? (
@@ -148,4 +146,4 @@ const AdminSubmissions = () => {
   );
 };
 
-export default AdminSubmissions;
+export default LecturerSubmissions;

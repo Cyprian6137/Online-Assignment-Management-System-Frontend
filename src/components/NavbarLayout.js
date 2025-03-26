@@ -2,45 +2,72 @@ import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.bundle.min.js"; // ✅ Ensure Bootstrap JS is loaded
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
-const NavbarLayout = ({ isAdmin, children }) => {
-  const { logout } = useAuth();
+const NavbarLayout = ({ children }) => {
+  const { user, logout } = useAuth();
   const history = useHistory();
-  const [isOpen, setIsOpen] = useState(false); // ✅ Track navbar state
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleLogout = () => {
     logout(history);
   };
 
+  const isAdmin = user?.role === "admin";
+  const isLecturer = user?.role === "lecturer"; // ✅ Fixed role check
+
   return (
     <div>
-      {/* ✅ Responsive Navbar */}
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm fixed-top">
         <div className="container">
-          <Link to={isAdmin ? "/admin-dashboard" : "/student-dashboard"} className="navbar-brand fw-bold">
-            📚 {isAdmin ? "Admin" : "Student"} Panel
-          </Link>
-          
-          {/* ✅ Toggle Button */}
-          <button
-            className="navbar-toggler"
-            type="button"
-            onClick={() => setIsOpen(!isOpen)} // ✅ Manually toggle state
+          <Link
+            to={
+              isAdmin
+                ? "/admin-dashboard"
+                : isLecturer
+                ? "/lecturer-dashboard"
+                : "/student-dashboard"
+            }
+            className="navbar-brand fw-bold"
           >
+            📚 {isAdmin ? "Admin" : isLecturer ? "Lecturer" : "Student"} Panel
+          </Link>
+
+          <button className="navbar-toggler" type="button" onClick={() => setIsOpen(!isOpen)}>
             <span className="navbar-toggler-icon"></span>
           </button>
-          
-          {/* ✅ Show/Hide Navbar Content Manually */}
+
           <div className={`collapse navbar-collapse ${isOpen ? "show" : ""}`} id="navbarNav">
             <ul className="navbar-nav me-auto">
               <li className="nav-item">
-                <Link to={isAdmin ? "/admin-dashboard" : "/student-dashboard"} className="nav-link">
+                <Link
+                  to={
+                    isAdmin
+                      ? "/admin-dashboard"
+                      : isLecturer
+                      ? "/lecturer-dashboard"
+                      : "/student-dashboard"
+                  }
+                  className="nav-link"
+                >
                   🏠 Dashboard
                 </Link>
               </li>
 
               {isAdmin ? (
+                <>
+                  <li className="nav-item">
+                    <Link to="/register-user" className="nav-link">
+                      👤 Register a New User
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/all-students" className="nav-link">
+                      📄 All Students
+                    </Link>
+                  </li>
+                </>
+              ) : isLecturer ? (
                 <>
                   <li className="nav-item">
                     <Link to="/create-assignment" className="nav-link">
@@ -53,13 +80,8 @@ const NavbarLayout = ({ isAdmin, children }) => {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link to="/Manage-Assignment" className="nav-link">
+                    <Link to="/manage-assignment" className="nav-link">
                       🏅 Manage Assignment
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link to="/Register" className="nav-link">
-                      👤 Register a New User
                     </Link>
                   </li>
                 </>
@@ -81,7 +103,7 @@ const NavbarLayout = ({ isAdmin, children }) => {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link to="/SubmitAssignment" className="nav-link">
+                    <Link to="/submit-assignment" className="nav-link">
                       📄 Submit Assignment
                     </Link>
                   </li>
@@ -96,7 +118,6 @@ const NavbarLayout = ({ isAdmin, children }) => {
         </div>
       </nav>
 
-      {/* ✅ Added margin to avoid content being hidden behind the navbar */}
       <div className="container mt-5 pt-5">{children}</div>
     </div>
   );
