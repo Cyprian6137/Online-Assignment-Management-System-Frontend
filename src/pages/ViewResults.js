@@ -39,6 +39,7 @@ const ViewResults = () => {
                 <tr>
                   <th>Assignment</th>
                   <th>Grade</th>
+                  <th>Letter Grade</th>
                   <th>Feedback</th>
                 </tr>
               </thead>
@@ -46,7 +47,8 @@ const ViewResults = () => {
                 {results.map((result) => (
                   <tr key={result._id}>
                     <td>{result.assignmentId?.title || "Unknown"}</td>
-                    <td>{result.grade ? `${result.grade}/100` : "Not Graded"}</td>
+                    <td>{result.grade !== undefined ? `${result.grade}/100` : "Not Graded"}</td>
+                    <td>{result.letterGrade || "N/A"}</td>
                     <td>{result.feedback || "No Feedback"}</td>
                   </tr>
                 ))}

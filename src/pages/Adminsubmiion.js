@@ -32,11 +32,29 @@ const LecturerSubmissions = () => {
       return;
     }
 
+    const numericGrade = parseFloat(grades[submissionId]);
+    let letterGrade;
+
+    // Determine letter grade based on numeric grade
+    if (numericGrade >= 80) {
+      letterGrade = 'A';
+    } else if (numericGrade >= 70) {
+      letterGrade = 'B';
+    } else if (numericGrade >= 60) {
+      letterGrade = 'C';
+    } else if (numericGrade >= 50) {
+      letterGrade = 'D';
+    } else if (numericGrade >= 40) {
+      letterGrade = 'E';
+    } else {
+      letterGrade = 'Fail';
+    }
+
     try {
       const token = localStorage.getItem("token");
       await axios.put(
         `http://localhost:5000/api/submissions/${submissionId}/grade`,
-        { grade: grades[submissionId], feedback: feedbacks[submissionId] },
+        { grade: numericGrade, letterGrade: letterGrade, feedback: feedbacks[submissionId] },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       toast.success("Submission graded successfully");
@@ -44,11 +62,12 @@ const LecturerSubmissions = () => {
       setSubmissions((prevSubmissions) =>
         prevSubmissions.map((submission) =>
           submission._id === submissionId
-            ? { ...submission, grade: grades[submissionId], feedback: feedbacks[submissionId] }
+            ? { ...submission, grade: numericGrade, letterGrade: letterGrade, feedback: feedbacks[submissionId] }
             : submission
         )
       );
 
+      // Clear the input fields
       setGrades((prev) => {
         const updatedGrades = { ...prev };
         delete updatedGrades[submissionId];
@@ -83,6 +102,7 @@ const LecturerSubmissions = () => {
                   <th>Assignment</th>
                   <th>Content</th>
                   <th>Grade</th>
+                  <th>Letter Grade</th>
                   <th>Feedback</th>
                   <th>Action</th>
                 </tr>
@@ -95,7 +115,7 @@ const LecturerSubmissions = () => {
                     <td>{submission?.assignmentId?.title || "No Title"}</td>
                     <td>{submission.content}</td>
                     <td>
-                      {submission.grade ? (
+                      {submission.grade !== undefined ? (
                         <span className="fw-bold">{submission.grade}</span>
                       ) : (
                         <input
@@ -107,6 +127,13 @@ const LecturerSubmissions = () => {
                             setGrades({ ...grades, [submission._id]: e.target.value })
                           }
                         />
+                      )}
+                    </td>
+                    <td>
+                      {submission.letterGrade ? (
+                        <span className="fw-bold">{submission.letterGrade}</span>
+                      ) : (
+                        <span>N/A</span>
                       )}
                     </td>
                     <td>

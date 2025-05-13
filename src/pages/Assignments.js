@@ -6,13 +6,14 @@ import NavbarLayout from "../components/NavbarLayout";
 
 const LecturerAssignmentList = () => {
   const [assignments, setAssignments] = useState([]);
+  const [submittedAssignments, setSubmittedAssignments] = useState(new Set());
   const [loading, setLoading] = useState(true);
   const history = useHistory();
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchAssignments = async () => {
       try {
-        const token = localStorage.getItem("token");
         const { data } = await axios.get("http://localhost:5000/api/assignments", {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -23,8 +24,23 @@ const LecturerAssignmentList = () => {
         setLoading(false);
       }
     };
+
+    const fetchSubmittedAssignments = async () => {
+      try {
+        const { data } = await axios.get("http://localhost:5000/api/submissions/my-submissions", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const submittedIds = new Set(data.map((submission) => submission.assignmentId));
+        setSubmittedAssignments(submittedIds);
+      } catch (error) {
+        toast.error(error.response?.data?.message || "Failed to load submission status");
+      }
+    };
+
     fetchAssignments();
-  }, []);
+    fetchSubmittedAssignments();
+  }, [token]);
 
   return (
     <NavbarLayout isAdmin={false} isLecturer={true}>
@@ -52,29 +68,32 @@ const LecturerAssignmentList = () => {
                 </tr>
               </thead>
               <tbody>
-                {assignments.map((assignment) => (
-                  <tr key={assignment._id}>
-                    <td>{assignment.title}</td>
-                    <td>{assignment.description}</td>
-                    <td>{new Date(assignment.dueDate).toLocaleDateString()}</td>
-                    <td>
-                      {assignment.submittedBy.some(submission => submission.user === localStorage.getItem("userId")) ? (
-                        <span className="text-success fw-bold">✅ Submitted</span>
-                      ) : (
-                        <span className="text-danger fw-bold">❌ Not Submitted</span>
-                      )}
-                    </td>
-                    <td>
-                      <button
-                        className={`btn ${assignment.submittedBy.some(submission => submission.user === localStorage.getItem("userId")) ? "btn-secondary" : "btn-primary"} btn-sm w-100`}
-                        onClick={() => history.push(`/SubmitAssignment/${assignment._id}`)}
-                        disabled={assignment.submittedBy.some(submission => submission.user === localStorage.getItem("userId"))}
-                      >
-                        {assignment.submittedBy.some(submission => submission.user === localStorage.getItem("userId")) ? "Submitted" : "Start Assignment"}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {assignments.map((assignment) => {
+                  const isSubmitted = submittedAssignments.has(assignment._id);
+                  return (
+                    <tr key={assignment._id}>
+                      <td>{assignment.title}</td>
+                      <td>{assignment.description}</td>
+                      <td>{new Date(assignment.dueDate).toLocaleDateString()}</td>
+                      <td>
+                        {isSubmitted ? (
+                          <span className="text-success fw-bold">✅ Submitted</span>
+                        ) : (
+                          <span className="text-danger fw-bold">❌ Not Submitted</span>
+                        )}
+                      </td>
+                      <td>
+                        <button
+                          className={`btn ${isSubmitted ? "btn-secondary" : "btn-primary"} btn-sm w-100`}
+                          onClick={() => history.push(`/SubmitAssignment/${assignment._id}`)}
+                          disabled={isSubmitted}
+                        >
+                          {isSubmitted ? "Submitted" : "Start Assignment"}
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -84,4 +103,4 @@ const LecturerAssignmentList = () => {
   );
 };
 
-export default LecturerAssignmentList;
+export default LecturerAssignmentList; 
