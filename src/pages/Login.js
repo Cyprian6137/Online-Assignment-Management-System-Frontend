@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../context/AuthContext"; // Ensure correct path
 import { toast } from "react-toastify";
@@ -10,7 +10,20 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
-  const { login } = useAuth(); // Access login function from AuthProvider
+  const { login, user } = useAuth(); // Access login function and user state
+
+  // Redirect if user is already logged in
+  useEffect(() => {
+    if (user) {
+      if (user.role === "admin") {
+        history.push("/admin-dashboard");
+      } else if (user.role === "lecturer") {
+        history.push("/lecturer-dashboard");
+      } else {
+        history.push("/student-dashboard");
+      }
+    }
+  }, [user, history]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,11 +46,6 @@ const Login = () => {
           <div className="col-md-5 d-flex flex-column align-items-center justify-content-center p-3">
             <img src={logo} alt="Logo" className="img-fluid" style={{ maxWidth: "150px" }} />
           </div>
-          
-          {/* Red Divider Line
-          <div className="col-md-1 d-flex align-items-center">
-            <div className="w-100" style={{ height: "10px", backgroundColor: "red" }}></div>
-          </div> */}
           
           {/* Right Section: Login Form */}
           <div className="col-md-6 p-3">

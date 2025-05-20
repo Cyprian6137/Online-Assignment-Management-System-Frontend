@@ -7,6 +7,7 @@ import { Modal, Button, Form } from "react-bootstrap";
 const ManageUsers = () => {
   const [students, setStudents] = useState([]);
   const [lecturers, setLecturers] = useState([]);
+  const [admins, setAdmins] = useState([]); // State for admins
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -22,6 +23,7 @@ const ManageUsers = () => {
 
         setStudents(data.filter(user => user.role === "student"));
         setLecturers(data.filter(user => user.role === "lecturer"));
+        setAdmins(data.filter(user => user.role === "admin")); // Filter for admins
       } catch (error) {
         console.error("Error fetching users:", error);
         toast.error("Failed to load users");
@@ -61,6 +63,7 @@ const ManageUsers = () => {
       // Update state
       setStudents(students.map(user => (user._id === selectedUser._id ? { ...user, ...formData } : user)));
       setLecturers(lecturers.map(user => (user._id === selectedUser._id ? { ...user, ...formData } : user)));
+      setAdmins(admins.map(user => (user._id === selectedUser._id ? { ...user, ...formData } : user))); // Update admins
     } catch (error) {
       console.error("Error updating user:", error);
       toast.error("Failed to update user");
@@ -80,6 +83,7 @@ const ManageUsers = () => {
       toast.success("User deleted successfully");
       setStudents(students.filter(user => user._id !== id));
       setLecturers(lecturers.filter(user => user._id !== id));
+      setAdmins(admins.filter(user => user._id !== id)); // Remove from admins
     } catch (error) {
       console.error("Error deleting user:", error);
       toast.error("Failed to delete user");
@@ -142,6 +146,33 @@ const ManageUsers = () => {
             </tbody>
           </table>
         )}
+
+        <h2 className="text-center mt-5">👨‍💼 Admins Management</h2>
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <table className="table table-bordered table-striped">
+            <thead className="table-dark">
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {admins.map((admin) => (
+                <tr key={admin._id}>
+                  <td>{admin.name}</td>
+                  <td>{admin.email}</td>
+                  <td>
+                    <button className="btn btn-warning btn-sm me-2" onClick={() => handleEdit(admin)}>Edit</button>
+                    <button className="btn btn-danger btn-sm" onClick={() => handleDelete(admin._id)}>Delete</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
 
       {/* Edit User Modal */}
@@ -184,6 +215,7 @@ const ManageUsers = () => {
               >
                 <option value="student">Student</option>
                 <option value="lecturer">Lecturer</option>
+                <option value="admin">Admin</option> {/* Option for admin */}
               </Form.Control>
             </Form.Group>
 

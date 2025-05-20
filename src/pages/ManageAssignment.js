@@ -69,6 +69,25 @@ const ManageAssignments = () => {
     <NavbarLayout isAdmin={false} isLecturer={true}>
       <div className="container mt-4">
         <h2 className="text-center">📚 Manage Assignments</h2>
+        
+        {editingAssignment && (
+          <div className="mt-4 p-3 border rounded bg-light">
+            <h4>Edit Assignment</h4>
+            <div className="mb-3">
+              <label className="form-label">Description</label>
+              <textarea className="form-control" value={newDescription} onChange={(e) => setNewDescription(e.target.value)}></textarea>
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Extend Due Date</label>
+              <input type="date" className="form-control" value={newDueDate} onChange={(e) => setNewDueDate(e.target.value)} />
+            </div>
+            <div className="d-flex flex-wrap">
+              <button className="btn btn-success m-1 w-100" onClick={handleUpdate}>Update</button>
+              <button className="btn btn-secondary m-1 w-100" onClick={() => setEditingAssignment(null)}>Cancel</button>
+            </div>
+          </div>
+        )}
+
         {loading ? (
           <p className="text-center">Loading...</p>
         ) : assignments.length === 0 ? (
@@ -102,24 +121,6 @@ const ManageAssignments = () => {
                 ))}
               </tbody>
             </table>
-          </div>
-        )}
-
-        {editingAssignment && (
-          <div className="mt-4 p-3 border rounded bg-light">
-            <h4>Edit Assignment</h4>
-            <div className="mb-3">
-              <label className="form-label">Description</label>
-              <textarea className="form-control" value={newDescription} onChange={(e) => setNewDescription(e.target.value)}></textarea>
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Extend Due Date</label>
-              <input type="date" className="form-control" value={newDueDate} onChange={(e) => setNewDueDate(e.target.value)} />
-            </div>
-            <div className="d-flex flex-wrap">
-              <button className="btn btn-success m-1 w-100" onClick={handleUpdate}>Update</button>
-              <button className="btn btn-secondary m-1 w-100" onClick={() => setEditingAssignment(null)}>Cancel</button>
-            </div>
           </div>
         )}
       </div>

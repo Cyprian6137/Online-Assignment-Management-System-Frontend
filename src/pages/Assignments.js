@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import NavbarLayout from "../components/NavbarLayout";
 
 const LecturerAssignmentList = () => {
@@ -9,38 +9,58 @@ const LecturerAssignmentList = () => {
   const [submittedAssignments, setSubmittedAssignments] = useState(new Set());
   const [loading, setLoading] = useState(true);
   const history = useHistory();
+  const location = useLocation();
   const token = localStorage.getItem("token");
 
-  useEffect(() => {
-    const fetchAssignments = async () => {
-      try {
-        const { data } = await axios.get("http://localhost:5000/api/assignments", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setAssignments(data);
-      } catch (error) {
-        toast.error(error.response?.data?.message || "Failed to load assignments");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchAssignments = useCallback(async () => {
+    if (!token) {
+      toast.error("No token found. Please log in.");
+      return;
+    }
 
-    const fetchSubmittedAssignments = async () => {
-      try {
-        const { data } = await axios.get("http://localhost:5000/api/submissions/my-submissions", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        const submittedIds = new Set(data.map((submission) => submission.assignmentId));
-        setSubmittedAssignments(submittedIds);
-      } catch (error) {
-        toast.error(error.response?.data?.message || "Failed to load submission status");
-      }
-    };
-
-    fetchAssignments();
-    fetchSubmittedAssignments();
+    try {
+      const { data } = await axios.get("http://localhost:5000/api/assignments", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setAssignments(data || []);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to load assignments");
+    }
   }, [token]);
+
+  const fetchSubmittedAssignments = useCallback(async () => {
+    if (!token) return;
+
+    try {
+      const { data } = await axios.get("http://localhost:5000/api/submissions/my-submissions", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const submittedIds = new Set(data.submittedAssignmentIds || data.map((id) => id)); // Adjust based on backend response
+      setSubmittedAssignments(submittedIds);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to load submission status");
+    }
+  }, [token]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      await fetchAssignments();
+      await fetchSubmittedAssignments();
+      setLoading(false);
+    };
+    loadData();
+  }, [fetchAssignments, fetchSubmittedAssignments]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const submittedId = params.get("submitted");
+    if (submittedId) {
+      setSubmittedAssignments((prev) => new Set(prev).add(submittedId));
+      history.replace(location.pathname);
+    }
+  }, [location.search, history, location.pathname]); // Include location.pathname here
 
   return (
     <NavbarLayout isAdmin={false} isLecturer={true}>
@@ -103,4 +123,4 @@ const LecturerAssignmentList = () => {
   );
 };
 
-export default LecturerAssignmentList; 
+export default LecturerAssignmentList;
